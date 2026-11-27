@@ -158,31 +158,54 @@ def to_md(res):
 
 
 def to_md_pe(res):
-    md = ['# Référence des appels API Nutanix v4 servis par Prism Element, par version d\'AOS\n',
+    md = ['# Référence des appels API Nutanix v4 par version d\'AOS du cluster cible\n',
           'Généré par `gen_api_calls.py PE` depuis les specs OpenAPI de <https://developers.nutanix.com/api-reference> '
           '(dossier `specs/json/`), via l\'extension `x-supported-versions` (product `PE`) de chaque opération. '
-          'Version machine : `api-calls-pe7.json`. Pendant côté Prism Central : `API-CALLS-PC7.md`.\n',
+          'Version machine : `api-calls-pe7.json`. Pendant côté Prism Central : `API-CALLS-PC7.md` ; '
+          'API historiques du PE (v1, v2.0, v3) : `API-CALLS-PE-LEGACY.md`.\n',
           '## Comment lire ce document\n',
-          '- Seules figurent les opérations que Nutanix déclare servies par le **Prism Element** (entrée `PE` dans '
-          '`x-supported-versions`). Tout le reste n\'existe que sur le Prism Central. Namespaces absents ici '
-          '(aiops, files, iam, licensing, microseg, monitoring, opsmgmt, storage, tenancy) : PC uniquement.\n'
-          '- Colonnes **AOS 7.0 / 7.5 / 7.6** : version d\'API à mettre à la place de `{v}`, `—` = appel absent. '
-          'AOS 7.3 n\'a pas de colonne mais apparaît dans *Min AOS*.\n'
-          '- Chemin complet : `https://<cvm-ou-vip>:9440/api` + chemin, ex. `/clustermgmt/{v}/config/clusters` → '
-          '`https://<vip>:9440/api/clustermgmt/v4.0/config/clusters`.\n'
+          '- ⚠️ **Ces appels se font sur le Prism Central, pas sur le Prism Element.** L\'entrée `PE` de '
+          '`x-supported-versions` donne la version d\'AOS minimale du **cluster visé** par l\'appel. Vérifié en lab '
+          '(voir la dernière section) : un PE enregistré sur un PC ne sert en v4 que `networking` et une partie de `lifecycle`, '
+          'et répond 404 au reste (clustermgmt, vmm, volumes…), quelle que soit la version d\'API.\n'
+          '- Seules figurent les opérations qui ont une entrée `PE`, donc qui dépendent de la version d\'AOS du cluster. '
+          'Namespaces absents (aiops, files, iam, licensing, microseg, monitoring, opsmgmt, storage, tenancy) : '
+          'pas de contrainte AOS déclarée.\n'
+          '- Colonnes **AOS 7.0 / 7.5 / 7.6** : version d\'API à mettre à la place de `{v}`, `—` = appel indisponible pour un '
+          'cluster de cette version. AOS 7.3 n\'a pas de colonne mais apparaît dans *Min AOS*.\n'
           '- Correspondance version d\'API → AOS déduite comme côté PC : release d\'une version GA = max(Min AOS de ses '
-          'opérations PE, release de la version précédente, plus petite release où un autre namespace a introduit des '
-          'appels PE dans ce numéro de version). **\\*** = version datée par ces deux dernières règles seulement : '
-          'la tester sur l\'AOS visé, ou retomber sur la version précédente.\n'
-          '- *Min AOS* normalisé : `6.1`…`7.0.1.6` → 7.0 (tout est servi par AOS 7.0) ; `Janus` (branche non publiée) → 7.6, **à vérifier**.\n'
-          '- Les API historiques du PE (`/PrismGateway/services/rest/v1`, `v2.0`, `/api/nutanix/v3`) ne sont pas '
-          'publiées en OpenAPI sur ce portail et ne figurent pas ici.\n'
-          '- **Preview** : appels PE des versions beta/alpha plus récentes que la dernière GA, hors matrice.\n'
+          'opérations, release de la version précédente, plus petite release où un autre namespace a introduit des '
+          'appels dans ce numéro de version). **\\*** = version datée par ces deux dernières règles seulement : '
+          'à vérifier, ou retomber sur la version précédente.\n'
+          '- *Min AOS* normalisé : `6.1`…`7.0.1.6` → 7.0 ; `Janus` (branche non publiée) → 7.6, **à vérifier**.\n'
+          '- **Preview** : appels des versions beta/alpha plus récentes que la dernière GA, hors matrice.\n'
           '- ⚠️ = opération marquée `deprecated` dans la spec.\n',
           '## Vue d\'ensemble : version d\'API par namespace et par AOS\n',
           '| Namespace | Titre | AOS 7.0 | AOS 7.5 | AOS 7.6 | Appels GA | Preview |',
           '|---|---|---|---|---|---|---|']
-    return '\n'.join(md) + '\n' + body(res, 'AOS')
+    return '\n'.join(md) + '\n' + body(res, 'AOS') + lab_checks()
+
+
+def lab_checks():
+    """Render checks/pe-v4-aos-<ver>.txt: GET without parameters sent straight to a PE, one line per path."""
+    files = sorted(glob.glob('checks/pe-v4-aos-*.txt'), key=lambda f: vkey(os.path.basename(f)))
+    if not files:
+        return ''
+    md = ['## Vérification en lab : v4 appelée directement sur le Prism Element\n',
+          'GET sans paramètre envoyé à `https://<pe>:9440/api` + chemin, sur chaque version d\'API, pour toutes les opérations '
+          'de liste de ce document. Clusters enregistrés sur un PC. Codes HTTP bruts : 200 = servi, 404 = absent, '
+          '412/500 = servi mais refusé dans ce contexte, 429 = limitation de débit pendant le test. '
+          'Lignes entièrement en 404 omises.\n']
+    for f in files:
+        aos = re.search(r'aos-([\d.]+)\.txt$', f).group(1)
+        rows = [l.split() for l in open(f, encoding='utf-8') if l.strip()]
+        vers = [c.split('=')[0] for c in rows[0][1:]]
+        served = [r for r in rows if any(not c.endswith('=404') for c in r[1:])]
+        md += [f'### AOS {aos} — {len(served)} chemins sur {len(rows)} répondent autrement que 404\n',
+               '| Chemin | ' + ' | '.join(vers) + ' |', '|---|' + '---|' * len(vers)]
+        md += [f'| `{r[0]}` | ' + ' | '.join(c.split('=')[1] for c in r[1:]) + ' |' for r in served]
+        md.append('')
+    return '\n'.join(md) + '\n'
 
 
 def body(res, short):

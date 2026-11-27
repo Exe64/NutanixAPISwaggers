@@ -1,16 +1,15 @@
-# Référence des appels API Nutanix v4 servis par Prism Element, par version d'AOS
+# Référence des appels API Nutanix v4 par version d'AOS du cluster cible
 
-Généré par `gen_api_calls.py PE` depuis les specs OpenAPI de <https://developers.nutanix.com/api-reference> (dossier `specs/json/`), via l'extension `x-supported-versions` (product `PE`) de chaque opération. Version machine : `api-calls-pe7.json`. Pendant côté Prism Central : `API-CALLS-PC7.md`.
+Généré par `gen_api_calls.py PE` depuis les specs OpenAPI de <https://developers.nutanix.com/api-reference> (dossier `specs/json/`), via l'extension `x-supported-versions` (product `PE`) de chaque opération. Version machine : `api-calls-pe7.json`. Pendant côté Prism Central : `API-CALLS-PC7.md` ; API historiques du PE (v1, v2.0, v3) : `API-CALLS-PE-LEGACY.md`.
 
 ## Comment lire ce document
 
-- Seules figurent les opérations que Nutanix déclare servies par le **Prism Element** (entrée `PE` dans `x-supported-versions`). Tout le reste n'existe que sur le Prism Central. Namespaces absents ici (aiops, files, iam, licensing, microseg, monitoring, opsmgmt, storage, tenancy) : PC uniquement.
-- Colonnes **AOS 7.0 / 7.5 / 7.6** : version d'API à mettre à la place de `{v}`, `—` = appel absent. AOS 7.3 n'a pas de colonne mais apparaît dans *Min AOS*.
-- Chemin complet : `https://<cvm-ou-vip>:9440/api` + chemin, ex. `/clustermgmt/{v}/config/clusters` → `https://<vip>:9440/api/clustermgmt/v4.0/config/clusters`.
-- Correspondance version d'API → AOS déduite comme côté PC : release d'une version GA = max(Min AOS de ses opérations PE, release de la version précédente, plus petite release où un autre namespace a introduit des appels PE dans ce numéro de version). **\*** = version datée par ces deux dernières règles seulement : la tester sur l'AOS visé, ou retomber sur la version précédente.
-- *Min AOS* normalisé : `6.1`…`7.0.1.6` → 7.0 (tout est servi par AOS 7.0) ; `Janus` (branche non publiée) → 7.6, **à vérifier**.
-- Les API historiques du PE (`/PrismGateway/services/rest/v1`, `v2.0`, `/api/nutanix/v3`) ne sont pas publiées en OpenAPI sur ce portail et ne figurent pas ici.
-- **Preview** : appels PE des versions beta/alpha plus récentes que la dernière GA, hors matrice.
+- ⚠️ **Ces appels se font sur le Prism Central, pas sur le Prism Element.** L'entrée `PE` de `x-supported-versions` donne la version d'AOS minimale du **cluster visé** par l'appel. Vérifié en lab (voir la dernière section) : un PE enregistré sur un PC ne sert en v4 que `networking` et une partie de `lifecycle`, et répond 404 au reste (clustermgmt, vmm, volumes…), quelle que soit la version d'API.
+- Seules figurent les opérations qui ont une entrée `PE`, donc qui dépendent de la version d'AOS du cluster. Namespaces absents (aiops, files, iam, licensing, microseg, monitoring, opsmgmt, storage, tenancy) : pas de contrainte AOS déclarée.
+- Colonnes **AOS 7.0 / 7.5 / 7.6** : version d'API à mettre à la place de `{v}`, `—` = appel indisponible pour un cluster de cette version. AOS 7.3 n'a pas de colonne mais apparaît dans *Min AOS*.
+- Correspondance version d'API → AOS déduite comme côté PC : release d'une version GA = max(Min AOS de ses opérations, release de la version précédente, plus petite release où un autre namespace a introduit des appels dans ce numéro de version). **\*** = version datée par ces deux dernières règles seulement : à vérifier, ou retomber sur la version précédente.
+- *Min AOS* normalisé : `6.1`…`7.0.1.6` → 7.0 ; `Janus` (branche non publiée) → 7.6, **à vérifier**.
+- **Preview** : appels des versions beta/alpha plus récentes que la dernière GA, hors matrice.
 - ⚠️ = opération marquée `deprecated` dans la spec.
 
 ## Vue d'ensemble : version d'API par namespace et par AOS
@@ -659,4 +658,38 @@ Release AOS par version : v4.0 → AOS 7.0, v4.1 → AOS 7.3, v4.2 → AOS 7.5\*
 | `GET` | `/volumes/{v}/config/volume-groups/{volumeGroupExtId}/vm-attachments` | listVmAttachmentsByVolumeGroupId ⚠️ | List all the VM attachments for a Volume Group | 7.0 | v4.0 | v4.2 | v4.3 |
 | `GET` | `/volumes/{v}/stats/volume-groups/{extId}` | getVolumeGroupStats | Get statistics for a Volume Group | 7.0 | v4.0 | v4.2 | v4.3 |
 | `GET` | `/volumes/{v}/stats/volume-groups/{volumeGroupExtId}/disks/{extId}` | getVolumeDiskStats | Get statistics for a Volume Disk | 7.0 | v4.0 | v4.2 | v4.3 |
+
+## Vérification en lab : v4 appelée directement sur le Prism Element
+
+GET sans paramètre envoyé à `https://<pe>:9440/api` + chemin, sur chaque version d'API, pour toutes les opérations de liste de ce document. Clusters enregistrés sur un PC. Codes HTTP bruts : 200 = servi, 404 = absent, 412/500 = servi mais refusé dans ce contexte, 429 = limitation de débit pendant le test. Lignes entièrement en 404 omises.
+
+### AOS 7.5.1.13 — 6 chemins sur 57 répondent autrement que 404
+
+| Chemin | v4.0 | v4.1 | v4.2 | v4.3 | v4.4 |
+|---|---|---|---|---|---|
+| `/networking/{v}/aws/config/capabilities` | 200 | 404 | 200 | 404 | 404 |
+| `/networking/{v}/aws/config/subnets` | 500 | 404 | 500 | 404 | 404 |
+| `/networking/{v}/aws/config/vpcs` | 500 | 404 | 500 | 404 | 404 |
+| `/networking/{v}/config/node-schedulable-statuses` | 200 | 200 | 200 | 404 | 404 |
+| `/networking/{v}/config/subnets` | 200 | 200 | 200 | 404 | 404 |
+| `/networking/{v}/config/virtual-switches` | 200 | 200 | 200 | 404 | 404 |
+
+### AOS 7.6.0.6 — 14 chemins sur 57 répondent autrement que 404
+
+| Chemin | v4.0 | v4.1 | v4.2 | v4.3 | v4.4 |
+|---|---|---|---|---|---|
+| `/lifecycle/{v}/resources/bundles` | 404 | 404 | 412 | 404 | 404 |
+| `/lifecycle/{v}/resources/config` | 404 | 404 | 200 | 404 | 404 |
+| `/lifecycle/{v}/resources/entities` | 404 | 404 | 200 | 404 | 404 |
+| `/lifecycle/{v}/resources/images` | 404 | 404 | 412 | 404 | 404 |
+| `/lifecycle/{v}/resources/lcm-histories` | 404 | 404 | 412 | 404 | 404 |
+| `/lifecycle/{v}/resources/lcm-summaries` | 404 | 404 | 200 | 404 | 404 |
+| `/lifecycle/{v}/resources/status` | 404 | 404 | 200 | 404 | 404 |
+| `/lifecycle/{v}/resources/upgrade-selections` | 404 | 404 | 412 | 404 | 404 |
+| `/networking/{v}/aws/config/capabilities` | 200 | 404 | 200 | 429 | 200 |
+| `/networking/{v}/aws/config/subnets` | 500 | 404 | 500 | 500 | 500 |
+| `/networking/{v}/aws/config/vpcs` | 500 | 404 | 500 | 500 | 429 |
+| `/networking/{v}/config/node-schedulable-statuses` | 200 | 200 | 200 | 200 | 200 |
+| `/networking/{v}/config/subnets` | 200 | 200 | 200 | 200 | 200 |
+| `/networking/{v}/config/virtual-switches` | 200 | 200 | 200 | 200 | 200 |
 
