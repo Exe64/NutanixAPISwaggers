@@ -5,7 +5,8 @@
   "7.0": "pc.2024.3 (AOS 7.0)",
   "7.3": "pc.7.3",
   "7.5": "pc.7.5",
-  "7.6": "pc.7.6"
+  "7.6": "pc.7.6",
+  "next": "après pc.7.6"
  },
  "namespaces": {
   "aiops": {
@@ -831,11 +832,9 @@
      "operationId": "updateCvmById",
      "summary": "Update configuration of a specific CVM associated with a cluster",
      "tag": "Clusters",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.4"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -6918,12 +6917,14 @@
     "v4.0": "7.0",
     "v4.1": "7.3",
     "v4.2": "7.5",
-    "v4.3": "7.6"
+    "v4.3": "7.5"
    },
-   "ga_version_release_inferred": [],
+   "ga_version_release_inferred": [
+    "v4.3"
+   ],
    "version_per_release": {
     "7.0": "v4.0",
-    "7.5": "v4.2",
+    "7.5": "v4.3",
     "7.6": "v4.3"
    },
    "calls": [
@@ -6938,7 +6939,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -6953,7 +6954,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -6968,7 +6969,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -6983,7 +6984,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -6994,11 +6995,9 @@
      "operationId": "listClaimTokens",
      "summary": "List claim tokens",
      "tag": "ClaimTokens",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7007,11 +7006,9 @@
      "operationId": "createClaimToken",
      "summary": "Create claim token",
      "tag": "ClaimTokens",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7020,11 +7017,9 @@
      "operationId": "listNodesByClaimTokenId",
      "summary": "List nodes by claim token",
      "tag": "ClaimTokens",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7033,11 +7028,9 @@
      "operationId": "getNodeByClaimTokenId",
      "summary": "Get node by claim token",
      "tag": "ClaimTokens",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "DELETE",
@@ -7046,11 +7039,9 @@
      "operationId": "deleteClaimTokenById",
      "summary": "Delete claim token",
      "tag": "ClaimTokens",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7059,11 +7050,9 @@
      "operationId": "getClaimTokenById",
      "summary": "Get claim token",
      "tag": "ClaimTokens",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "PUT",
@@ -7072,11 +7061,9 @@
      "operationId": "updateClaimTokenById",
      "summary": "Update claim token",
      "tag": "ClaimTokens",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7085,11 +7072,9 @@
      "operationId": "getSecretByClaimTokenId",
      "summary": "Get claim token secret",
      "tag": "ClaimTokens",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7102,7 +7087,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7117,7 +7102,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7132,7 +7117,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7147,21 +7132,21 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
     {
      "method": "POST",
-     "path": "/lifecycle/v4.2/resources/entities/$actions/export",
+     "path": "/lifecycle/v4.3/resources/entities/$actions/export",
      "generic_path": "/lifecycle/{v}/resources/entities/$actions/export",
      "operationId": "exportInventory",
-     "summary": "Export inventory information (the list of LCM entities) in the connected clusters.",
+     "summary": "Export the entity inventory as a downloadable file.",
      "tag": "Entities",
      "min_release": "7.5",
      "deprecated": false,
      "available": {
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7176,7 +7161,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7187,11 +7172,9 @@
      "operationId": "getFoundationCentralConfig",
      "summary": "Get Foundation Central configuration",
      "tag": "FoundationCentralConfig",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "PUT",
@@ -7200,11 +7183,9 @@
      "operationId": "updateFoundationCentralConfig",
      "summary": "Update Foundation Central configuration",
      "tag": "FoundationCentralConfig",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7213,11 +7194,9 @@
      "operationId": "listHardwareProviders",
      "summary": "List hardware providers",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7226,11 +7205,9 @@
      "operationId": "getHardwareProviderById",
      "summary": "Get hardware provider details",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7239,11 +7216,9 @@
      "operationId": "listConnectionsByHardwareProviderId",
      "summary": "List connections",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7252,11 +7227,9 @@
      "operationId": "createConnectionByHardwareProviderId",
      "summary": "Create connection",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7265,11 +7238,9 @@
      "operationId": "listIpPoolsByConnectionId",
      "summary": "List IP address pools",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7278,11 +7249,9 @@
      "operationId": "getIpPoolById",
      "summary": "Get IP address pool details",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7291,11 +7260,9 @@
      "operationId": "listMacPoolsByConnectionId",
      "summary": "List MAC address pools",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7304,11 +7271,9 @@
      "operationId": "getMacPoolById",
      "summary": "Get MAC address pool details",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7317,11 +7282,9 @@
      "operationId": "listNodesByConnectionId",
      "summary": "List discovered nodes",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7330,11 +7293,9 @@
      "operationId": "getConnectionNodeById",
      "summary": "Get discovered node details",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7343,11 +7304,9 @@
      "operationId": "listServerIdentityPoolsByConnectionId",
      "summary": "List server identity pools",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7356,11 +7315,9 @@
      "operationId": "getServerIdentityPoolById",
      "summary": "Get server identity pool details",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "DELETE",
@@ -7369,11 +7326,9 @@
      "operationId": "deleteConnectionById",
      "summary": "Delete connection",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7382,11 +7337,9 @@
      "operationId": "getConnectionById",
      "summary": "Get connection details",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "PUT",
@@ -7395,11 +7348,9 @@
      "operationId": "updateConnectionById",
      "summary": "Update connection",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7408,11 +7359,9 @@
      "operationId": "refreshConnection",
      "summary": "Refresh connection",
      "tag": "HardwareProviders",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7425,7 +7374,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7439,6 +7388,7 @@
      "min_release": null,
      "deprecated": false,
      "available": {
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7452,6 +7402,7 @@
      "min_release": null,
      "deprecated": false,
      "available": {
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7465,6 +7416,7 @@
      "min_release": null,
      "deprecated": false,
      "available": {
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7478,6 +7430,7 @@
      "min_release": null,
      "deprecated": false,
      "available": {
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7491,6 +7444,7 @@
      "min_release": null,
      "deprecated": false,
      "available": {
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7505,49 +7459,49 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
     {
      "method": "GET",
-     "path": "/lifecycle/v4.2/resources/lcm-histories",
+     "path": "/lifecycle/v4.3/resources/lcm-histories",
      "generic_path": "/lifecycle/{v}/resources/lcm-histories",
      "operationId": "listLcmHistories",
-     "summary": "Summary of the queried LCM histories.",
+     "summary": "List LCM operation history entries.",
      "tag": "LcmHistories",
      "min_release": "7.5",
      "deprecated": false,
      "available": {
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
     {
      "method": "POST",
-     "path": "/lifecycle/v4.2/resources/lcm-histories/$actions/export",
+     "path": "/lifecycle/v4.3/resources/lcm-histories/$actions/export",
      "generic_path": "/lifecycle/{v}/resources/lcm-histories/$actions/export",
      "operationId": "exportHistories",
-     "summary": "Export the history information of connected clusters.",
+     "summary": "Export LCM operation history as a downloadable file.",
      "tag": "LcmHistories",
      "min_release": "7.5",
      "deprecated": false,
      "available": {
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
     {
      "method": "GET",
-     "path": "/lifecycle/v4.2/resources/lcm-histories/{extId}",
+     "path": "/lifecycle/v4.3/resources/lcm-histories/{extId}",
      "generic_path": "/lifecycle/{v}/resources/lcm-histories/{extId}",
      "operationId": "getLcmHistoryById",
-     "summary": "Get details about an LCM history entry.",
+     "summary": "Retrieve details of a single LCM operation history entry.",
      "tag": "LcmHistories",
      "min_release": "7.5",
      "deprecated": false,
      "available": {
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7562,7 +7516,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7577,7 +7531,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7588,11 +7542,9 @@
      "operationId": "listNodes",
      "summary": "List nodes",
      "tag": "Nodes",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7601,11 +7553,9 @@
      "operationId": "createNode",
      "summary": "Onboard node",
      "tag": "Nodes",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7614,11 +7564,9 @@
      "operationId": "configureNode",
      "summary": "Configure node",
      "tag": "Nodes",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "DELETE",
@@ -7627,11 +7575,9 @@
      "operationId": "deleteNodeById",
      "summary": "Delete node",
      "tag": "Nodes",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7640,11 +7586,9 @@
      "operationId": "getNodeById",
      "summary": "Get node information",
      "tag": "Nodes",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "PUT",
@@ -7653,11 +7597,9 @@
      "operationId": "updateNodeById",
      "summary": "Update node information",
      "tag": "Nodes",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7666,11 +7608,9 @@
      "operationId": "imageNode",
      "summary": "Image node",
      "tag": "Nodes",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7679,11 +7619,9 @@
      "operationId": "refreshNode",
      "summary": "Refresh node",
      "tag": "Nodes",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7696,7 +7634,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7711,7 +7649,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7722,11 +7660,9 @@
      "operationId": "listPatchedImages",
      "summary": "List patched images",
      "tag": "PatchedImages",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7735,11 +7671,9 @@
      "operationId": "createPatchedImage",
      "summary": "Create patched image",
      "tag": "PatchedImages",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "DELETE",
@@ -7748,11 +7682,9 @@
      "operationId": "deletePatchedImageById",
      "summary": "Delete patched image",
      "tag": "PatchedImages",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "GET",
@@ -7761,11 +7693,9 @@
      "operationId": "getPatchedImageById",
      "summary": "Get patched image details",
      "tag": "PatchedImages",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.3"
-     }
+     "available": {}
     },
     {
      "method": "POST",
@@ -7778,7 +7708,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7793,7 +7723,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7808,7 +7738,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7823,77 +7753,77 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
     {
      "method": "GET",
-     "path": "/lifecycle/v4.2/resources/upgrade-selections",
+     "path": "/lifecycle/v4.3/resources/upgrade-selections",
      "generic_path": "/lifecycle/{v}/resources/upgrade-selections",
      "operationId": "listUpgradeSelections",
-     "summary": "Get the LCM Upgrade Selections on the cluster",
+     "summary": "List all upgrade selections on the cluster.",
      "tag": "UpgradeSelections",
      "min_release": "7.5",
      "deprecated": false,
      "available": {
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
     {
      "method": "POST",
-     "path": "/lifecycle/v4.2/resources/upgrade-selections",
+     "path": "/lifecycle/v4.3/resources/upgrade-selections",
      "generic_path": "/lifecycle/{v}/resources/upgrade-selections",
      "operationId": "createUpgradeSelection",
-     "summary": "Create a new LCM Upgrade Selection",
+     "summary": "Save a new upgrade selection for a cluster.",
      "tag": "UpgradeSelections",
      "min_release": "7.5",
      "deprecated": false,
      "available": {
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
     {
      "method": "DELETE",
-     "path": "/lifecycle/v4.2/resources/upgrade-selections/{extId}",
+     "path": "/lifecycle/v4.3/resources/upgrade-selections/{extId}",
      "generic_path": "/lifecycle/{v}/resources/upgrade-selections/{extId}",
      "operationId": "deleteUpgradeSelectionById",
-     "summary": "Delete LCM upgrade selection",
+     "summary": "Delete an upgrade selection.",
      "tag": "UpgradeSelections",
      "min_release": "7.5",
      "deprecated": false,
      "available": {
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
     {
      "method": "GET",
-     "path": "/lifecycle/v4.2/resources/upgrade-selections/{extId}",
+     "path": "/lifecycle/v4.3/resources/upgrade-selections/{extId}",
      "generic_path": "/lifecycle/{v}/resources/upgrade-selections/{extId}",
      "operationId": "getUpgradeSelectionById",
-     "summary": "Information about the upgrade selection made on the cluster",
+     "summary": "Retrieve details of a specific upgrade selection.",
      "tag": "UpgradeSelections",
      "min_release": "7.5",
      "deprecated": false,
      "available": {
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
     {
      "method": "POST",
-     "path": "/lifecycle/v4.2/resources/upgrade-selections/{extId}/$actions/export",
+     "path": "/lifecycle/v4.3/resources/upgrade-selections/{extId}/$actions/export",
      "generic_path": "/lifecycle/{v}/resources/upgrade-selections/{extId}/$actions/export",
      "operationId": "exportUpgradeSelection",
-     "summary": "Download the darksite upgrade orchestrator helper scripts which are packaged in the download_helper.zip file",
+     "summary": "Export a download helper package for obtaining dark-site bundles.",
      "tag": "UpgradeSelections",
      "min_release": "7.5",
      "deprecated": false,
      "available": {
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     },
@@ -7908,7 +7838,7 @@
      "deprecated": false,
      "available": {
       "7.0": "v4.0",
-      "7.5": "v4.2",
+      "7.5": "v4.3",
       "7.6": "v4.3"
      }
     }

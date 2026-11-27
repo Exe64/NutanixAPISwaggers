@@ -8,7 +8,7 @@ Généré par `gen_api_calls.py PE` depuis les specs OpenAPI de <https://develop
 - Seules figurent les opérations qui ont une entrée `PE`, donc qui dépendent de la version d'AOS du cluster. Namespaces absents (aiops, files, iam, licensing, microseg, monitoring, opsmgmt, storage, tenancy) : pas de contrainte AOS déclarée.
 - Colonnes **AOS 7.0 / 7.5 / 7.6** : version d'API à mettre à la place de `{v}`, `—` = appel indisponible pour un cluster de cette version. AOS 7.3 n'a pas de colonne mais apparaît dans *Min AOS*.
 - Correspondance version d'API → AOS déduite comme côté PC : release d'une version GA = max(Min AOS de ses opérations, release de la version précédente, plus petite release où un autre namespace a introduit des appels dans ce numéro de version). **\*** = version datée par ces deux dernières règles seulement : à vérifier, ou retomber sur la version précédente.
-- *Min AOS* normalisé : `6.1`…`7.0.1.6` → 7.0 ; `Janus` (branche non publiée) → 7.6, **à vérifier**.
+- *Min AOS* normalisé : `6.1`…`7.0.1.6` → 7.0 ; `master`/`Janus` (branches non publiées) → « > 7.6 », sans version dans les colonnes.
 - **Preview** : appels des versions beta/alpha plus récentes que la dernière GA, hors matrice.
 - ⚠️ = opération marquée `deprecated` dans la spec.
 
@@ -62,7 +62,7 @@ Release AOS par version : v4.0 → AOS 7.0, v4.1 → AOS 7.3, v4.2 → AOS 7.5, 
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms` | listCvmsbyClusterId | Get a list of CVMs associated with a cluster | 7.5 | — | v4.2 | v4.4 |
 | `POST` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms/$actions/reconfigure` | reconfigureCvms | Reconfigure CVMs within a cluster | 7.5 | — | v4.2 | v4.4 |
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms/{extId}` | getCvmById | Get the details of a specific CVM associated with a cluster | 7.5 | — | v4.2 | v4.4 |
-| `PUT` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms/{extId}` | updateCvmById | Update configuration of a specific CVM associated with a cluster | 7.6 | — | — | v4.4 |
+| `PUT` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms/{extId}` | updateCvmById | Update configuration of a specific CVM associated with a cluster | > 7.6 | — | — | — |
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/hosts` | listHostsByClusterId | Get the list of hosts associated with a cluster | 7.0 | v4.0 | v4.2 | v4.4 |
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/hosts/{extId}` | getHostById | Get the details of host associated with the cluster | 7.0 | v4.0 | v4.2 | v4.4 |
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/hosts/{hostExtId}/host-nics` | listHostNicsByHostId | Get the list of host NICs | 7.0 | v4.0 | v4.2 | v4.4 |

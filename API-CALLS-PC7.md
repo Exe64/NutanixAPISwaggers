@@ -8,7 +8,7 @@ Généré par `gen_api_calls.py` depuis les specs OpenAPI de <https://developers
 - Nutanix ne publie pas de table « version d'API → PC ». Elle est déduite ainsi : release d'une version GA = max(Min PC de ses opérations, release de la version précédente, plus petite release où un autre namespace a introduit des appels dans ce même numéro de version). Une version marquée **\*** est datée par ces deux dernières règles seulement (aucun appel nouveau ne le prouve) : la tester sur le PC visé, ou retomber sur la version précédente.
 - Pour chaque PC, la version retenue par namespace est la plus récente version GA dont la release est ≤ ce PC. Les colonnes 7.0 / 7.5 / 7.6 donnent la version à mettre à la place de `{v}` ; `—` = appel absent de ce PC.
 - Chemin complet : `https://<pc>:9440/api` + chemin, ex. `/vmm/{v}/ahv/config/vms` → `https://<pc>:9440/api/vmm/v4.0/ahv/config/vms`.
-- *Min PC* : version minimale déclarée par Nutanix, normalisée depuis les libellés bruts : `2022.x`…`2024.3.1` → 7.0 ; `2025.1`, `2025.2`, `7.3`, `pc.7.3` → 7.3 ; `pc.7.5`, `7.5.1` → 7.5 ; `master`/`Janus` (branches non publiées) → 7.6, **à vérifier**.
+- *Min PC* : version minimale déclarée par Nutanix, normalisée depuis les libellés bruts : `2022.x`…`2024.3.1` → 7.0 ; `2025.1`, `2025.2`, `7.3`, `pc.7.3` → 7.3 ; `pc.7.5`, `7.5.1` → 7.5 ; `master`/`Janus` (branches non publiées) → « > 7.6 » : appel annoncé mais pas encore servi (vérifié sur pc.7.6.0.10 pour `master`), sans version dans les colonnes.
 - Un PC sert aussi les versions d'API plus anciennes : un appel listé en v4.0 reste appelable en v4.0 sur 7.5 et 7.6.
 - **Preview** : appels des versions beta/alpha plus récentes que la dernière GA, hors matrice, à ne pas utiliser en production.
 - ⚠️ = opération marquée `deprecated` dans la spec.
@@ -24,7 +24,7 @@ Généré par `gen_api_calls.py` depuis les specs OpenAPI de <https://developers
 | [`files`](#files) | Nutanix Files APIs | v4.0 | v4.0 | v4.0 | 102 | v4.0.a2 |
 | [`iam`](#iam) | Nutanix Identity and Access Management APIs | v4.0 | v4.0 | v4.0 | 54 | v4.1.b3 |
 | [`licensing`](#licensing) | Nutanix Licensing APIs | v4.0 | v4.3 | v4.4 | 22 |  |
-| [`lifecycle`](#lifecycle) | Nutanix Lifecycle Management APIs | v4.0 | v4.2 | v4.3 | 72 |  |
+| [`lifecycle`](#lifecycle) | Nutanix Lifecycle Management APIs | v4.0 | v4.3\* | v4.3\* | 72 |  |
 | [`microseg`](#microseg) | Nutanix Flow Management APIs | v4.0 | v4.3\* | v4.3\* | 33 |  |
 | [`monitoring`](#monitoring) | Nutanix Monitoring APIs | v4.0 | v4.3\* | v4.3\* | 23 |  |
 | [`multidomain`](#multidomain) | Nutanix Multidomain Versioned APIs | — | v4.3\* | v4.3\* | 14 | v4.4.b1 |
@@ -114,7 +114,7 @@ Release PC par version : v4.0 → pc.2024.3 (AOS 7.0), v4.1 → pc.7.3, v4.2 →
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms` | listCvmsbyClusterId | Get a list of CVMs associated with a cluster | 7.5 | — | v4.2 | v4.4 |
 | `POST` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms/$actions/reconfigure` | reconfigureCvms | Reconfigure CVMs within a cluster | 7.5 | — | v4.2 | v4.4 |
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms/{extId}` | getCvmById | Get the details of a specific CVM associated with a cluster | 7.5 | — | v4.2 | v4.4 |
-| `PUT` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms/{extId}` | updateCvmById | Update configuration of a specific CVM associated with a cluster | 7.6 | — | — | v4.4 |
+| `PUT` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/cvms/{extId}` | updateCvmById | Update configuration of a specific CVM associated with a cluster | > 7.6 | — | — | — |
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/hosts` | listHostsByClusterId | Get the list of hosts associated with a cluster | 7.0 | v4.0 | v4.2 | v4.4 |
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/hosts/{extId}` | getHostById | Get the details of host associated with the cluster | 7.0 | v4.0 | v4.2 | v4.4 |
 | `GET` | `/clustermgmt/{v}/config/clusters/{clusterExtId}/hosts/{hostExtId}/host-nics` | listHostNicsByHostId | Get the list of host NICs | 7.0 | v4.0 | v4.2 | v4.4 |
@@ -665,101 +665,101 @@ Release PC par version : v4.0 → pc.2024.3 (AOS 7.0), v4.1 → pc.7.3\*, v4.2 �
 
 **Nutanix Lifecycle Management APIs** — versions GA : v4.0, v4.1, v4.2, v4.3
 
-Release PC par version : v4.0 → pc.2024.3 (AOS 7.0), v4.1 → pc.7.3, v4.2 → pc.7.5, v4.3 → pc.7.6
+Release PC par version : v4.0 → pc.2024.3 (AOS 7.0), v4.1 → pc.7.3, v4.2 → pc.7.5, v4.3 → pc.7.5\*
 
 | Méthode | Chemin | operationId | Résumé | Min PC | 7.0 | 7.5 | 7.6 |
 |---|---|---|---|---|---|---|---|
 | | **Bundles** | | | | | | |
-| `GET` | `/lifecycle/{v}/resources/bundles` | listBundles | Get LCM bundles on the cluster | 7.0 | v4.0 | v4.2 | v4.3 |
-| `POST` | `/lifecycle/{v}/resources/bundles` | createBundle | Create a new LCM bundle | 7.0 | v4.0 | v4.2 | v4.3 |
-| `DELETE` | `/lifecycle/{v}/resources/bundles/{extId}` | deleteBundleById | Delete an LCM bundle | 7.0 | v4.0 | v4.2 | v4.3 |
-| `GET` | `/lifecycle/{v}/resources/bundles/{extId}` | getBundleById | Information about a bundle | 7.0 | v4.0 | v4.2 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/bundles` | listBundles | Get LCM bundles on the cluster | 7.0 | v4.0 | v4.3 | v4.3 |
+| `POST` | `/lifecycle/{v}/resources/bundles` | createBundle | Create a new LCM bundle | 7.0 | v4.0 | v4.3 | v4.3 |
+| `DELETE` | `/lifecycle/{v}/resources/bundles/{extId}` | deleteBundleById | Delete an LCM bundle | 7.0 | v4.0 | v4.3 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/bundles/{extId}` | getBundleById | Information about a bundle | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **ClaimTokens** | | | | | | |
-| `GET` | `/lifecycle/{v}/config/claim-tokens` | listClaimTokens | List claim tokens | 7.6 | — | — | v4.3 |
-| `POST` | `/lifecycle/{v}/config/claim-tokens` | createClaimToken | Create claim token | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/claim-tokens/{claimTokenExtId}/nodes` | listNodesByClaimTokenId | List nodes by claim token | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/claim-tokens/{claimTokenExtId}/nodes/{extId}` | getNodeByClaimTokenId | Get node by claim token | 7.6 | — | — | v4.3 |
-| `DELETE` | `/lifecycle/{v}/config/claim-tokens/{extId}` | deleteClaimTokenById | Delete claim token | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/claim-tokens/{extId}` | getClaimTokenById | Get claim token | 7.6 | — | — | v4.3 |
-| `PUT` | `/lifecycle/{v}/config/claim-tokens/{extId}` | updateClaimTokenById | Update claim token | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/claim-tokens/{extId}/secret` | getSecretByClaimTokenId | Get claim token secret | 7.6 | — | — | v4.3 |
+| `GET` | `/lifecycle/{v}/config/claim-tokens` | listClaimTokens | List claim tokens | > 7.6 | — | — | — |
+| `POST` | `/lifecycle/{v}/config/claim-tokens` | createClaimToken | Create claim token | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/claim-tokens/{claimTokenExtId}/nodes` | listNodesByClaimTokenId | List nodes by claim token | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/claim-tokens/{claimTokenExtId}/nodes/{extId}` | getNodeByClaimTokenId | Get node by claim token | > 7.6 | — | — | — |
+| `DELETE` | `/lifecycle/{v}/config/claim-tokens/{extId}` | deleteClaimTokenById | Delete claim token | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/claim-tokens/{extId}` | getClaimTokenById | Get claim token | > 7.6 | — | — | — |
+| `PUT` | `/lifecycle/{v}/config/claim-tokens/{extId}` | updateClaimTokenById | Update claim token | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/claim-tokens/{extId}/secret` | getSecretByClaimTokenId | Get claim token secret | > 7.6 | — | — | — |
 | | **Config** | | | | | | |
-| `GET` | `/lifecycle/{v}/resources/config` | getConfig | Get the present LCM configuration. | 7.0 | v4.0 | v4.2 | v4.3 |
-| `PUT` | `/lifecycle/{v}/resources/config` | updateConfig | Change the LCM configuration. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/config` | getConfig | Get the present LCM configuration. | 7.0 | v4.0 | v4.3 | v4.3 |
+| `PUT` | `/lifecycle/{v}/resources/config` | updateConfig | Change the LCM configuration. | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **Entities** | | | | | | |
-| `POST` | `/lifecycle/{v}/operations/$actions/preload-artifacts` | preloadArtifacts | Preload artifacts on to the cluster. | 7.0 | v4.0 | v4.2 | v4.3 |
-| `GET` | `/lifecycle/{v}/resources/entities` | listEntities | Get details about all LCM entities. | 7.0 | v4.0 | v4.2 | v4.3 |
-| `POST` | `/lifecycle/{v}/resources/entities/$actions/export` | exportInventory | Export inventory information (the list of LCM entities) in the connected clusters. | 7.5 | — | v4.2 | v4.3 |
-| `GET` | `/lifecycle/{v}/resources/entities/{extId}` | getEntityById | Get details about an LCM entity. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `POST` | `/lifecycle/{v}/operations/$actions/preload-artifacts` | preloadArtifacts | Preload artifacts on to the cluster. | 7.0 | v4.0 | v4.3 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/entities` | listEntities | Get details about all LCM entities. | 7.0 | v4.0 | v4.3 | v4.3 |
+| `POST` | `/lifecycle/{v}/resources/entities/$actions/export` | exportInventory | Export the entity inventory as a downloadable file. | 7.5 | — | v4.3 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/entities/{extId}` | getEntityById | Get details about an LCM entity. | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **FoundationCentralConfig** | | | | | | |
-| `GET` | `/lifecycle/{v}/mgmt/foundation-central-config` | getFoundationCentralConfig | Get Foundation Central configuration | 7.6 | — | — | v4.3 |
-| `PUT` | `/lifecycle/{v}/mgmt/foundation-central-config` | updateFoundationCentralConfig | Update Foundation Central configuration | 7.6 | — | — | v4.3 |
+| `GET` | `/lifecycle/{v}/mgmt/foundation-central-config` | getFoundationCentralConfig | Get Foundation Central configuration | > 7.6 | — | — | — |
+| `PUT` | `/lifecycle/{v}/mgmt/foundation-central-config` | updateFoundationCentralConfig | Update Foundation Central configuration | > 7.6 | — | — | — |
 | | **HardwareProviders** | | | | | | |
-| `GET` | `/lifecycle/{v}/config/hardware-providers` | listHardwareProviders | List hardware providers | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{extId}` | getHardwareProviderById | Get hardware provider details | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections` | listConnectionsByHardwareProviderId | List connections | 7.6 | — | — | v4.3 |
-| `POST` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections` | createConnectionByHardwareProviderId | Create connection | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/ip-pools` | listIpPoolsByConnectionId | List IP address pools | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/ip-pools/{extId}` | getIpPoolById | Get IP address pool details | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/mac-pools` | listMacPoolsByConnectionId | List MAC address pools | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/mac-pools/{extId}` | getMacPoolById | Get MAC address pool details | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/nodes` | listNodesByConnectionId | List discovered nodes | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/nodes/{extId}` | getConnectionNodeById | Get discovered node details | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/server-identity-pools` | listServerIdentityPoolsByConnectionId | List server identity pools | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/server-identity-pools/{extId}` | getServerIdentityPoolById | Get server identity pool details | 7.6 | — | — | v4.3 |
-| `DELETE` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{extId}` | deleteConnectionById | Delete connection | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{extId}` | getConnectionById | Get connection details | 7.6 | — | — | v4.3 |
-| `PUT` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{extId}` | updateConnectionById | Update connection | 7.6 | — | — | v4.3 |
-| `POST` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{extId}/$actions/refresh` | refreshConnection | Refresh connection | 7.6 | — | — | v4.3 |
+| `GET` | `/lifecycle/{v}/config/hardware-providers` | listHardwareProviders | List hardware providers | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{extId}` | getHardwareProviderById | Get hardware provider details | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections` | listConnectionsByHardwareProviderId | List connections | > 7.6 | — | — | — |
+| `POST` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections` | createConnectionByHardwareProviderId | Create connection | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/ip-pools` | listIpPoolsByConnectionId | List IP address pools | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/ip-pools/{extId}` | getIpPoolById | Get IP address pool details | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/mac-pools` | listMacPoolsByConnectionId | List MAC address pools | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/mac-pools/{extId}` | getMacPoolById | Get MAC address pool details | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/nodes` | listNodesByConnectionId | List discovered nodes | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/nodes/{extId}` | getConnectionNodeById | Get discovered node details | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/server-identity-pools` | listServerIdentityPoolsByConnectionId | List server identity pools | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{connectionExtId}/server-identity-pools/{extId}` | getServerIdentityPoolById | Get server identity pool details | > 7.6 | — | — | — |
+| `DELETE` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{extId}` | deleteConnectionById | Delete connection | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{extId}` | getConnectionById | Get connection details | > 7.6 | — | — | — |
+| `PUT` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{extId}` | updateConnectionById | Update connection | > 7.6 | — | — | — |
+| `POST` | `/lifecycle/{v}/config/hardware-providers/{hardwareProviderExtId}/connections/{extId}/$actions/refresh` | refreshConnection | Refresh connection | > 7.6 | — | — | — |
 | | **Images** | | | | | | |
-| `GET` | `/lifecycle/{v}/resources/images` | listImages | Get the list of downloaded LCM images. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/images` | listImages | Get the list of downloaded LCM images. | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **InstallerImages** | | | | | | |
-| `GET` | `/lifecycle/{v}/config/images` | listImages | List images | ? | — | — | v4.3 |
-| `POST` | `/lifecycle/{v}/config/images` | createImage | Create image | ? | — | — | v4.3 |
-| `DELETE` | `/lifecycle/{v}/config/images/{extId}` | deleteImageById | Delete image | ? | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/images/{extId}` | getImageById | Get image details | ? | — | — | v4.3 |
-| `PUT` | `/lifecycle/{v}/config/images/{extId}` | updateImageById | Update image details | ? | — | — | v4.3 |
+| `GET` | `/lifecycle/{v}/config/images` | listImages | List images | ? | — | v4.3 | v4.3 |
+| `POST` | `/lifecycle/{v}/config/images` | createImage | Create image | ? | — | v4.3 | v4.3 |
+| `DELETE` | `/lifecycle/{v}/config/images/{extId}` | deleteImageById | Delete image | ? | — | v4.3 | v4.3 |
+| `GET` | `/lifecycle/{v}/config/images/{extId}` | getImageById | Get image details | ? | — | v4.3 | v4.3 |
+| `PUT` | `/lifecycle/{v}/config/images/{extId}` | updateImageById | Update image details | ? | — | v4.3 | v4.3 |
 | | **Inventory** | | | | | | |
-| `POST` | `/lifecycle/{v}/operations/$actions/inventory` | performInventory | Perform an inventory operation to identify/scan entities on the cluster that can be updated through LCM. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `POST` | `/lifecycle/{v}/operations/$actions/inventory` | performInventory | Perform an inventory operation to identify/scan entities on the cluster that can be updated through LCM. | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **LcmHistories** | | | | | | |
-| `GET` | `/lifecycle/{v}/resources/lcm-histories` | listLcmHistories | Summary of the queried LCM histories. | 7.5 | — | v4.2 | v4.3 |
-| `POST` | `/lifecycle/{v}/resources/lcm-histories/$actions/export` | exportHistories | Export the history information of connected clusters. | 7.5 | — | v4.2 | v4.3 |
-| `GET` | `/lifecycle/{v}/resources/lcm-histories/{extId}` | getLcmHistoryById | Get details about an LCM history entry. | 7.5 | — | v4.2 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/lcm-histories` | listLcmHistories | List LCM operation history entries. | 7.5 | — | v4.3 | v4.3 |
+| `POST` | `/lifecycle/{v}/resources/lcm-histories/$actions/export` | exportHistories | Export LCM operation history as a downloadable file. | 7.5 | — | v4.3 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/lcm-histories/{extId}` | getLcmHistoryById | Retrieve details of a single LCM operation history entry. | 7.5 | — | v4.3 | v4.3 |
 | | **LcmSummaries** | | | | | | |
-| `GET` | `/lifecycle/{v}/resources/lcm-summaries` | listLcmSummaries | List the LCM summaries. | 7.0 | v4.0 | v4.2 | v4.3 |
-| `GET` | `/lifecycle/{v}/resources/lcm-summaries/{extId}` | getLcmSummaryById | Get the LCM summary. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/lcm-summaries` | listLcmSummaries | List the LCM summaries. | 7.0 | v4.0 | v4.3 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/lcm-summaries/{extId}` | getLcmSummaryById | Get the LCM summary. | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **Nodes** | | | | | | |
-| `GET` | `/lifecycle/{v}/config/nodes` | listNodes | List nodes | 7.6 | — | — | v4.3 |
-| `POST` | `/lifecycle/{v}/config/nodes` | createNode | Onboard node | 7.6 | — | — | v4.3 |
-| `POST` | `/lifecycle/{v}/config/nodes/$actions/configure` | configureNode | Configure node | 7.6 | — | — | v4.3 |
-| `DELETE` | `/lifecycle/{v}/config/nodes/{extId}` | deleteNodeById | Delete node | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/nodes/{extId}` | getNodeById | Get node information | 7.6 | — | — | v4.3 |
-| `PUT` | `/lifecycle/{v}/config/nodes/{extId}` | updateNodeById | Update node information | 7.6 | — | — | v4.3 |
-| `POST` | `/lifecycle/{v}/config/nodes/{extId}/$actions/image` | imageNode | Image node | 7.6 | — | — | v4.3 |
-| `POST` | `/lifecycle/{v}/config/nodes/{extId}/$actions/refresh` | refreshNode | Refresh node | 7.6 | — | — | v4.3 |
+| `GET` | `/lifecycle/{v}/config/nodes` | listNodes | List nodes | > 7.6 | — | — | — |
+| `POST` | `/lifecycle/{v}/config/nodes` | createNode | Onboard node | > 7.6 | — | — | — |
+| `POST` | `/lifecycle/{v}/config/nodes/$actions/configure` | configureNode | Configure node | > 7.6 | — | — | — |
+| `DELETE` | `/lifecycle/{v}/config/nodes/{extId}` | deleteNodeById | Delete node | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/nodes/{extId}` | getNodeById | Get node information | > 7.6 | — | — | — |
+| `PUT` | `/lifecycle/{v}/config/nodes/{extId}` | updateNodeById | Update node information | > 7.6 | — | — | — |
+| `POST` | `/lifecycle/{v}/config/nodes/{extId}/$actions/image` | imageNode | Image node | > 7.6 | — | — | — |
+| `POST` | `/lifecycle/{v}/config/nodes/{extId}/$actions/refresh` | refreshNode | Refresh node | > 7.6 | — | — | — |
 | | **Notifications** | | | | | | |
-| `POST` | `/lifecycle/{v}/operations/$actions/compute-notifications` | ComputeNotifications | Compute LCM upgrade plan and notifications for a set of entities. | 7.0 | v4.0 | v4.2 | v4.3 |
-| `GET` | `/lifecycle/{v}/resources/notifications/{extId}` | GetNotificationById | Get LCM upgrade notification details for specified resource UUID. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `POST` | `/lifecycle/{v}/operations/$actions/compute-notifications` | ComputeNotifications | Compute LCM upgrade plan and notifications for a set of entities. | 7.0 | v4.0 | v4.3 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/notifications/{extId}` | GetNotificationById | Get LCM upgrade notification details for specified resource UUID. | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **PatchedImages** | | | | | | |
-| `GET` | `/lifecycle/{v}/config/patched-images` | listPatchedImages | List patched images | 7.6 | — | — | v4.3 |
-| `POST` | `/lifecycle/{v}/config/patched-images` | createPatchedImage | Create patched image | 7.6 | — | — | v4.3 |
-| `DELETE` | `/lifecycle/{v}/config/patched-images/{extId}` | deletePatchedImageById | Delete patched image | 7.6 | — | — | v4.3 |
-| `GET` | `/lifecycle/{v}/config/patched-images/{extId}` | getPatchedImageById | Get patched image details | 7.6 | — | — | v4.3 |
+| `GET` | `/lifecycle/{v}/config/patched-images` | listPatchedImages | List patched images | > 7.6 | — | — | — |
+| `POST` | `/lifecycle/{v}/config/patched-images` | createPatchedImage | Create patched image | > 7.6 | — | — | — |
+| `DELETE` | `/lifecycle/{v}/config/patched-images/{extId}` | deletePatchedImageById | Delete patched image | > 7.6 | — | — | — |
+| `GET` | `/lifecycle/{v}/config/patched-images/{extId}` | getPatchedImageById | Get patched image details | > 7.6 | — | — | — |
 | | **Prechecks** | | | | | | |
-| `POST` | `/lifecycle/{v}/operations/$actions/prechecks` | performPrechecks | Perform LCM prechecks operation. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `POST` | `/lifecycle/{v}/operations/$actions/prechecks` | performPrechecks | Perform LCM prechecks operation. | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **Recommendations** | | | | | | |
-| `POST` | `/lifecycle/{v}/operations/$actions/compute-recommendations` | computeRecommendations | Compute LCM recommendations for a set of entities. | 7.0 | v4.0 | v4.2 | v4.3 |
-| `GET` | `/lifecycle/{v}/resources/recommendations/{extId}` | GetRecommendationById | Get a list of update recommendations from LCM. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `POST` | `/lifecycle/{v}/operations/$actions/compute-recommendations` | computeRecommendations | Compute LCM recommendations for a set of entities. | 7.0 | v4.0 | v4.3 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/recommendations/{extId}` | GetRecommendationById | Get a list of update recommendations from LCM. | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **Status** | | | | | | |
-| `GET` | `/lifecycle/{v}/resources/status` | getStatus | Get the LCM framework status. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/status` | getStatus | Get the LCM framework status. | 7.0 | v4.0 | v4.3 | v4.3 |
 | | **UpgradeSelections** | | | | | | |
-| `GET` | `/lifecycle/{v}/resources/upgrade-selections` | listUpgradeSelections | Get the LCM Upgrade Selections on the cluster | 7.5 | — | v4.2 | v4.3 |
-| `POST` | `/lifecycle/{v}/resources/upgrade-selections` | createUpgradeSelection | Create a new LCM Upgrade Selection | 7.5 | — | v4.2 | v4.3 |
-| `DELETE` | `/lifecycle/{v}/resources/upgrade-selections/{extId}` | deleteUpgradeSelectionById | Delete LCM upgrade selection | 7.5 | — | v4.2 | v4.3 |
-| `GET` | `/lifecycle/{v}/resources/upgrade-selections/{extId}` | getUpgradeSelectionById | Information about the upgrade selection made on the cluster | 7.5 | — | v4.2 | v4.3 |
-| `POST` | `/lifecycle/{v}/resources/upgrade-selections/{extId}/$actions/export` | exportUpgradeSelection | Download the darksite upgrade orchestrator helper scripts which are packaged in the download_helper.zip file | 7.5 | — | v4.2 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/upgrade-selections` | listUpgradeSelections | List all upgrade selections on the cluster. | 7.5 | — | v4.3 | v4.3 |
+| `POST` | `/lifecycle/{v}/resources/upgrade-selections` | createUpgradeSelection | Save a new upgrade selection for a cluster. | 7.5 | — | v4.3 | v4.3 |
+| `DELETE` | `/lifecycle/{v}/resources/upgrade-selections/{extId}` | deleteUpgradeSelectionById | Delete an upgrade selection. | 7.5 | — | v4.3 | v4.3 |
+| `GET` | `/lifecycle/{v}/resources/upgrade-selections/{extId}` | getUpgradeSelectionById | Retrieve details of a specific upgrade selection. | 7.5 | — | v4.3 | v4.3 |
+| `POST` | `/lifecycle/{v}/resources/upgrade-selections/{extId}/$actions/export` | exportUpgradeSelection | Export a download helper package for obtaining dark-site bundles. | 7.5 | — | v4.3 | v4.3 |
 | | **Upgrades** | | | | | | |
-| `POST` | `/lifecycle/{v}/operations/$actions/upgrade` | performUpgrade | Perform an LCM upgrade operation. | 7.0 | v4.0 | v4.2 | v4.3 |
+| `POST` | `/lifecycle/{v}/operations/$actions/upgrade` | performUpgrade | Perform an LCM upgrade operation. | 7.0 | v4.0 | v4.3 | v4.3 |
 
 ## microseg
 
@@ -1559,4 +1559,47 @@ Release PC par version : v4.0 → pc.2024.3 (AOS 7.0), v4.1 → pc.7.3, v4.2 →
 | `GET` | `/volumes/{v}/config/volume-groups/{volumeGroupExtId}/vm-attachments` | listVmAttachmentsByVolumeGroupId ⚠️ | List all the VM attachments for a Volume Group | 7.0 | v4.0 | v4.3 | v4.3 |
 | `GET` | `/volumes/{v}/stats/volume-groups/{extId}` | getVolumeGroupStats | Get statistics for a Volume Group | 7.0 | v4.0 | v4.3 | v4.3 |
 | `GET` | `/volumes/{v}/stats/volume-groups/{volumeGroupExtId}/disks/{extId}` | getVolumeDiskStats | Get statistics for a Volume Disk | 7.0 | v4.0 | v4.3 | v4.3 |
+
+## Vérification en lab : pc.7.6.0.10
+
+GET sans paramètre envoyé au PC pour toutes les opérations de liste, sur chaque version d'API publiée (pré-versions comprises). Cellule = chemins qui répondent autrement que 404 / chemins testés. Les autres codes (400, 403, 412, 500, 503) signifient que la version est servie mais que l'appel est refusé dans ce contexte (paramètre requis, droits, service non déployé).
+
+| Namespace | Version de la colonne 7.6 | Versions servies | Verdict |
+|---|---|---|---|
+| `aiops` | v4.0 | v4.0 3/3, v4.2.b1 3/3 | ✅ servie |
+| `clustermgmt` | v4.4 | v4.0 12/12, v4.1 12/12, v4.2 12/12, v4.3 12/12, v4.4 12/12 | ✅ servie |
+| `datapolicies` | v4.3 | v4.0 4/4, v4.1 4/4, v4.2 4/4, v4.3 4/4 | ✅ servie |
+| `dataprotection` | v4.4 | v4.0 4/4, v4.1 4/4, v4.2 4/4, v4.3 4/4, v4.4 4/4 | ✅ servie |
+| `files` | v4.0 | v4.0 4/4, v4.0.a2 4/4 | ✅ servie |
+| `iam` | v4.0 | v4.0 10/10, v4.1.b3 10/10 | ✅ servie |
+| `licensing` | v4.4 | v4.0 12/12, v4.1 12/12, v4.2 12/12, v4.3 12/12, v4.4 12/12 | ✅ servie |
+| `lifecycle` | v4.3 | v4.0 8/14, v4.1 8/14, v4.2 8/14, v4.3 8/14 | ✅ servie |
+| `microseg` | v4.3 | v4.0 6/6, v4.1 6/6, v4.2 6/6, v4.3 6/6 | ✅ servie |
+| `monitoring` | v4.3 | v4.0 6/6, v4.1 6/6, v4.2 6/6, v4.3 6/6 | ✅ servie |
+| `multidomain` | v4.3 | v4.2 1/4, v4.3 2/4, v4.4.b1 2/4 | ✅ servie |
+| `networking` | v4.4 | v4.0 23/23, v4.1 23/23, v4.2 23/23, v4.3 23/23, v4.4 23/23 | ✅ servie |
+| `objects` | v4.1 | v4.0 1/1, v4.1 1/1 | ✅ servie |
+| `opsmgmt` | v4.0 | v4.0 3/3, v4.1.b1 0/3 | ✅ servie |
+| `prism` | v4.4 | v4.0 4/4, v4.1 4/4, v4.2 4/4, v4.3 4/4, v4.4 4/4 | ✅ servie |
+| `security` | v4.2 | v4.0 9/9, v4.1 9/9, v4.2 9/9 | ✅ servie |
+| `vmm` | v4.3 | v4.0 18/19, v4.1 19/19, v4.2 19/19, v4.3 19/19 | ✅ servie |
+| `volumes` | v4.3 | v4.0 3/3, v4.1 3/3, v4.2 3/3, v4.3 3/3 | ✅ servie |
+
+Chemins en 404 sur au moins une version :
+
+| Chemin | Réponses |
+|---|---|
+| `/lifecycle/{v}/config/claim-tokens` | v4.0 404, v4.1 404, v4.2 404, v4.3 404 |
+| `/lifecycle/{v}/config/hardware-providers` | v4.0 404, v4.1 404, v4.2 404, v4.3 404 |
+| `/lifecycle/{v}/config/images` | v4.0 404, v4.1 404, v4.2 404, v4.3 404 |
+| `/lifecycle/{v}/config/nodes` | v4.0 404, v4.1 404, v4.2 404, v4.3 404 |
+| `/lifecycle/{v}/config/patched-images` | v4.0 404, v4.1 404, v4.2 404, v4.3 404 |
+| `/lifecycle/{v}/mgmt/foundation-central-config` | v4.0 404, v4.1 404, v4.2 404, v4.3 404 |
+| `/multidomain/{v}/config/locations` | v4.2 404, v4.3 404, v4.4.b1 404 |
+| `/multidomain/{v}/config/registered-domains` | v4.2 404, v4.3 404, v4.4.b1 404 |
+| `/multidomain/{v}/management/local-domain` | v4.2 404, v4.3 200, v4.4.b1 200 |
+| `/opsmgmt/{v}/config/report-configs` | v4.0 503, v4.1.b1 404 |
+| `/opsmgmt/{v}/config/reports` | v4.0 503, v4.1.b1 404 |
+| `/opsmgmt/{v}/content/report-artifacts` | v4.0 503, v4.1.b1 404 |
+| `/vmm/{v}/config/template-placement-policies` | v4.0 404, v4.1 200, v4.2 200, v4.3 200 |
 

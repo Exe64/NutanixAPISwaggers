@@ -15,6 +15,7 @@ et référence des appels disponibles par version de Prism Central et par versio
 | `specs/json/swagger-{ns}-{v}-all.json` | Mêmes specs converties en JSON |
 | `specs/pe-legacy/aos-<version>/` | Specs v1, v2.0 (Swagger 1.2, une déclaration par ressource) et v3 (Swagger 2.0) servies par un PE |
 | `checks/pe-v4-aos-<version>.txt` | Codes HTTP des GET v4 envoyés directement à un PE, par version d'API |
+| `checks/pc-v4-pc.<version>.txt` | Codes HTTP des GET v4 envoyés à un PC (`namespace chemin version code`), rendus en fin de `API-CALLS-PC7.md` |
 | [`gen_api_calls.py`](gen_api_calls.py), [`gen_pe_legacy.py`](gen_pe_legacy.py) | Régénère les références depuis `specs/json/` : `python3 gen_api_calls.py PC` ou `PE`, `python3 gen_pe_legacy.py` (Python 3.9+, bibliothèque standard) |
 
 Toutes les versions GA de chaque namespace sont présentes, plus la dernière pré-version quand elle est plus récente
@@ -44,4 +45,4 @@ Pour une nouvelle release, l'ajouter dans `TARGETS`, `RANK`, `LABEL` et `norm_pc
 
 Nutanix ne publie pas de correspondance « version d'API → release PC ». Elle est déduite de l'extension
 `x-supported-versions` de chaque opération (entrées `PC` et `PE`) ; la méthode et ses incertitudes (versions marquées `*`) sont décrites
-en tête de chaque référence. L'entrée `PE` des specs v4 désigne la version d'AOS du cluster visé, pas un appel au PE : en lab, un PE enregistré sur un PC ne sert en v4 que `networking` et une partie de `lifecycle`. Les API historiques n'ont pu être relevées que sur AOS 7.5.1.13 et 7.6.0.6.
+en tête de chaque référence. L'entrée `PE` des specs v4 désigne la version d'AOS du cluster visé, pas un appel au PE : en lab, un PE enregistré sur un PC ne sert en v4 que `networking` et une partie de `lifecycle`. Les API historiques n'ont pu être relevées que sur AOS 7.5.1.13 et 7.6.0.6. La colonne PC 7.6 est vérifiée sur un pc.7.6.0.10 (toutes les versions retenues sont servies) ; 7.0 et 7.5 restent déduites.

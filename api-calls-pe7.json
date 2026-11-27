@@ -5,7 +5,8 @@
   "7.0": "AOS 7.0",
   "7.3": "AOS 7.3",
   "7.5": "AOS 7.5",
-  "7.6": "AOS 7.6"
+  "7.6": "AOS 7.6",
+  "next": "après AOS 7.6"
  },
  "namespaces": {
   "clustermgmt": {
@@ -372,11 +373,9 @@
      "operationId": "updateCvmById",
      "summary": "Update configuration of a specific CVM associated with a cluster",
      "tag": "Clusters",
-     "min_release": "7.6",
+     "min_release": "next",
      "deprecated": false,
-     "available": {
-      "7.6": "v4.4"
-     }
+     "available": {}
     },
     {
      "method": "GET",

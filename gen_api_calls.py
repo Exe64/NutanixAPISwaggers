@@ -16,10 +16,11 @@ OUT_MD = f'API-CALLS-{PRODUCT}7.md'
 OUT_JSON = f'api-calls-{PRODUCT.lower()}7.json'
 METHODS = ('get', 'post', 'put', 'patch', 'delete')
 TARGETS = ['7.0', '7.5', '7.6']
-RANK = {'7.0': 0, '7.3': 1, '7.5': 2, '7.6': 3}
-LABELS = {'PC': {'7.0': 'pc.2024.3 (AOS 7.0)', '7.3': 'pc.7.3', '7.5': 'pc.7.5', '7.6': 'pc.7.6'},
-          'PE': {'7.0': 'AOS 7.0', '7.3': 'AOS 7.3', '7.5': 'AOS 7.5', '7.6': 'AOS 7.6'}}
+RANK = {'7.0': 0, '7.3': 1, '7.5': 2, '7.6': 3, 'next': 4}   # next = after 7.6, not released
+LABELS = {'PC': {'7.0': 'pc.2024.3 (AOS 7.0)', '7.3': 'pc.7.3', '7.5': 'pc.7.5', '7.6': 'pc.7.6', 'next': 'après pc.7.6'},
+          'PE': {'7.0': 'AOS 7.0', '7.3': 'AOS 7.3', '7.5': 'AOS 7.5', '7.6': 'AOS 7.6', 'next': 'après AOS 7.6'}}
 LABEL = LABELS[PRODUCT]
+MIN = {'next': '> 7.6'}
 
 
 def norm_pc(v):
@@ -36,7 +37,7 @@ def norm_pc(v):
     if v.startswith('7.6'):
         return '7.6'
     if v in ('master', 'janus'):
-        return '7.6'                       # unreleased-branch label: assumed latest, flagged in the doc
+        return 'next'                      # unreleased branch: the lab pc.7.6.0.10 does not serve the 'master' calls
     return None
 
 
@@ -78,7 +79,8 @@ def build():
     hi = lambda xs: max(xs, key=RANK.get) if xs else '7.0'
     gas = {ns: sorted((v for v in vers if re.fullmatch(r'v\d+\.\d+', v)), key=vkey) for ns, vers in specs.items()}
     # evidence: highest min_release among a version's operations
-    evid = {(ns, v): hi([o['min_release'] for o in specs[ns][v].values() if o['min_release']]) for ns in gas for v in gas[ns]}
+    evid = {(ns, v): hi([o['min_release'] for o in specs[ns][v].values() if o['min_release'] not in (None, 'next')])
+            for ns in gas for v in gas[ns]}
     # floor per version number: earliest release where some namespace introduced new calls in it
     floor = {}
     for ns, ga in gas.items():
@@ -109,9 +111,15 @@ def build():
             if not pick[t]:
                 continue
             for k, o in vers[pick[t]].items():
+                if RANK[o['min_release'] or '7.0'] > RANK[t]:
+                    continue               # declared for a later release than this one
                 c = calls.setdefault(k, {**o, 'available': {}})
                 c['available'][t] = pick[t]
                 c['deprecated'] = c['deprecated'] or o['deprecated']
+        if ga:                             # announced in the newest GA spec, not served by any release yet
+            for k, o in vers[ga[-1]].items():
+                if o['min_release'] == 'next' and k not in calls:
+                    calls[k] = {**o, 'available': {}}
         preview = {}
         if pre and (not ga or vkey(pre[-1]) > vkey(ga[-1])):
             pv = pre[-1]
@@ -147,14 +155,15 @@ def to_md(res):
           '`https://<pc>:9440/api/vmm/v4.0/ahv/config/vms`.\n'
           '- *Min PC* : version minimale déclarée par Nutanix, normalisée depuis les libellés bruts : '
           '`2022.x`…`2024.3.1` → 7.0 ; `2025.1`, `2025.2`, `7.3`, `pc.7.3` → 7.3 ; `pc.7.5`, `7.5.1` → 7.5 ; '
-          '`master`/`Janus` (branches non publiées) → 7.6, **à vérifier**.\n'
+          '`master`/`Janus` (branches non publiées) → « > 7.6 » : appel annoncé mais pas encore servi (vérifié sur pc.7.6.0.10 '
+          'pour `master`), sans version dans les colonnes.\n'
           '- Un PC sert aussi les versions d\'API plus anciennes : un appel listé en v4.0 reste appelable en v4.0 sur 7.5 et 7.6.\n'
           '- **Preview** : appels des versions beta/alpha plus récentes que la dernière GA, hors matrice, à ne pas utiliser en production.\n'
           '- ⚠️ = opération marquée `deprecated` dans la spec.\n',
           '## Vue d\'ensemble : version d\'API par namespace et par PC\n',
           '| Namespace | Titre | PC 7.0 | PC 7.5 | PC 7.6 | Appels GA | Preview |',
           '|---|---|---|---|---|---|---|']
-    return '\n'.join(md) + '\n' + body(res, 'PC')
+    return '\n'.join(md) + '\n' + body(res, 'PC') + pc_lab_checks(res)
 
 
 def to_md_pe(res):
@@ -177,13 +186,47 @@ def to_md_pe(res):
           'opérations, release de la version précédente, plus petite release où un autre namespace a introduit des '
           'appels dans ce numéro de version). **\\*** = version datée par ces deux dernières règles seulement : '
           'à vérifier, ou retomber sur la version précédente.\n'
-          '- *Min AOS* normalisé : `6.1`…`7.0.1.6` → 7.0 ; `Janus` (branche non publiée) → 7.6, **à vérifier**.\n'
+          '- *Min AOS* normalisé : `6.1`…`7.0.1.6` → 7.0 ; `master`/`Janus` (branches non publiées) → « > 7.6 », sans version dans les colonnes.\n'
           '- **Preview** : appels des versions beta/alpha plus récentes que la dernière GA, hors matrice.\n'
           '- ⚠️ = opération marquée `deprecated` dans la spec.\n',
           '## Vue d\'ensemble : version d\'API par namespace et par AOS\n',
           '| Namespace | Titre | AOS 7.0 | AOS 7.5 | AOS 7.6 | Appels GA | Preview |',
           '|---|---|---|---|---|---|---|']
     return '\n'.join(md) + '\n' + body(res, 'AOS') + lab_checks()
+
+
+def pc_lab_checks(res):
+    """Render checks/pc-v4-pc.<ver>.txt: lines 'ns generic_path version http_code' from GETs sent to a PC."""
+    out = []
+    for f in sorted(glob.glob('checks/pc-v4-pc.*.txt'), key=lambda f: vkey(os.path.basename(f))):
+        pc = re.search(r'pc-v4-(pc\.[\d.]+)\.txt$', f).group(1)
+        t = re.match(r'pc\.(\d+\.\d+)', pc).group(1)
+        rows = collections.defaultdict(dict)
+        for line in open(f, encoding='utf-8'):
+            ns, gp, v, code = line.split()
+            rows[(ns, gp)][v] = code
+        out += [f'## Vérification en lab : {pc}\n',
+                'GET sans paramètre envoyé au PC pour toutes les opérations de liste, sur chaque version d\'API publiée '
+                '(pré-versions comprises). Cellule = chemins qui répondent autrement que 404 / chemins testés. '
+                'Les autres codes (400, 403, 412, 500, 503) signifient que la version est servie mais que l\'appel est '
+                'refusé dans ce contexte (paramètre requis, droits, service non déployé).\n',
+                f'| Namespace | Version de la colonne {t} | Versions servies | Verdict |', '|---|---|---|---|']
+        for ns, d in res['namespaces'].items():
+            vs = sorted({v for (n, _), r in rows.items() if n == ns for v in r}, key=vkey)
+            if not vs:
+                continue
+            cnt = {v: (sum(r.get(v, '404') != '404' for (n, _), r in rows.items() if n == ns),
+                       sum(v in r for (n, _), r in rows.items() if n == ns)) for v in vs}
+            ref = d['version_per_release'].get(t)
+            ok = ref and cnt.get(ref, (0, 0))[0] > 0
+            out.append(f'| `{ns}` | {ref or "—"} | ' + ', '.join(f'{v} {a}/{b}' for v, (a, b) in cnt.items())
+                       + f' | {"✅ servie" if ok else "❌ non servie" if ref else ""} |')
+        missing = [(ns, gp, r) for (ns, gp), r in sorted(rows.items()) if '404' in r.values()]
+        out += ['', 'Chemins en 404 sur au moins une version :\n', '| Chemin | Réponses |', '|---|---|']
+        out += [f'| `{gp}` | ' + ', '.join(f'{v} {c}' for v, c in sorted(r.items(), key=lambda x: vkey(x[0]))) + ' |'
+                for ns, gp, r in missing]
+        out.append('')
+    return '\n'.join(out) + '\n' if out else ''
 
 
 def lab_checks():
@@ -238,7 +281,7 @@ def body(res, short):
                 a = c['available']
                 dep = ' ⚠️' if c['deprecated'] else ''
                 md.append(f'| `{c["method"]}` | `{c["generic_path"]}` | {c["operationId"]}{dep} | {c["summary"]} | '
-                          f'{c["min_release"] or "?"} | {a.get("7.0", "—")} | {a.get("7.5", "—")} | {a.get("7.6", "—")} |')
+                          f'{MIN.get(c["min_release"], c["min_release"] or "?")} | {a.get("7.0", "—")} | {a.get("7.5", "—")} | {a.get("7.6", "—")} |')
             md.append('')
         if d['preview'] and d['preview']['calls']:
             p = d['preview']
